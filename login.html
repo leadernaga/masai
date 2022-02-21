@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #parent {
+            width: 30%;
+            margin: auto;
+            border: 1px solid gray;
+            padding: 50px;
+            margin-top: 50px;
+            border-radius: 5px;
+        }
+        
+        label,
+        input[type="submit"] {
+            display: block;
+            margin: 10px auto;
+        }
+        
+        form {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="parent">
+        <form id="frm" action="">
+            <label for="">UserName</label>
+            <input class="inp username" type="text" maxlength="50" placeholder="Enter UserName">
+            <label for="">Password</label>
+            <input type="password" class="inp password" placeholder="Enter Password">
+            <input class="inp submit" type="submit" value="login">
+
+
+        </form>
+
+    </div>
+
+</body>
+
+<script>
+    document.querySelector("form").addEventListener("submit", login)
+    var arr = JSON.parse(localStorage.getItem("localsignup")) || [];
+
+    function login(event) {
+        event.preventDefault();
+        var form = document.querySelector("#frm");
+        var user = document.querySelector(".username").value;
+        var password = document.querySelector(".password").value;
+        var flag = false;
+
+
+        arr.map(function(elem) {
+
+            if (user == elem.name && password == elem.password) {
+                flag = true;
+
+            }
+
+
+        })
+        if (flag) {
+            alert("Login Successful")
+        } else {
+            alert("Wrong credential")
+        }
+
+        // console.log(user)
+
+
+
+
+    }
+</script>
+
+
+
+
+
+
+</html>
