@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            justify-content: space-around;
+            gap: 20px;
+        }
+        
+        .container>div>div {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            justify-content: space-between;
+        }
+        
+        h4 {
+            margin: 0px;
+        }
+        
+        .btnad,
+        .btndec {
+            margin: 10px;
+        }
+        
+        .total {
+            display: inline;
+            margin: 25px 10px;
+        }
+        
+        #disc {
+            margin-left: 100px;
+            height: 25px;
+            width: 200px;
+            border: 1px solid blue;
+            border-radius: 10px;
+        }
+        
+        .dis {
+            margin-left: 30px;
+            padding: 5px;
+            width: 80px;
+            background-color: blue;
+            color: white;
+            font-weight: 800;
+            border: none;
+            border-radius: 10px;
+        }
+        
+        .dis:hover {
+            background-color: black;
+            color: white;
+            font-weight: 900;
+        }
+        
+        .message {
+            margin-left: 200px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+
+
+
+    </div>
+
+
+
+    <h1 class="total">total</h1>
+    <input type="text" id="disc" placeholder="Enter coupon code">
+    <button class="dis">Apply</button>
+    <p class="message"></p>
+
+    <button class="checkout">chek out</button>
+
+</body>
+
+<script>
+    var cartarr = JSON.parse(localStorage.getItem("Cartlocal")) || [];
+    // var updated = cartarr;
+
+
+
+    function datashow() {
+        cartarr.map(function(elem, index) {
+            var div = document.createElement("div");
+            var image = document.createElement("img");
+            image.src = elem.image_url;
+            var name = document.createElement("h5");
+            name.innerText = elem.name;
+            var divprice = document.createElement("div");
+            var price = document.createElement("h4");
+            price.innerText = elem.price + "-" + elem.qty;
+
+            var strike = document.createElement("strike");
+            strike.innerText = elem.strikedoffprice;
+            divprice.append(price, strike);
+            var btn = document.createElement("button");
+            btn.innerText = "add  1";
+            btn.className = "btnad"
+            btn.addEventListener("click", function() {
+                add(index)
+                datashow()
+
+            });
+            var btn1 = document.createElement("button");
+            btn1.innerText = "Decrease  1";
+            btn1.className = "btndec";
+            btn1.addEventListener("click", function() {
+                decrease(index)
+                datashow()
+
+            });
+
+            div.append(image, name, divprice, btn, btn1)
+            document.querySelector(".container").append(div);
+
+        })
+
+        var total = cartarr.reduce(function(acc, elem) {
+            return acc + elem.price * elem.qty;
+        }, 0)
+        document.querySelector(".total").innerText = "₹" + " " + total;
+
+        document.querySelector(".dis").addEventListener("click", function() {
+            discount(total);
+
+        })
+
+        function discount(total) {
+            var coupon = document.querySelector("#disc").value;
+            if (coupon == "masai30") {
+
+                total = Math.floor((total / 100) * 70)
+                document.querySelector(".message").innerText = "30% discount coupon applied";
+                document.querySelector(".total").innerText = total;
+
+            } else {
+                document.querySelector(".message").innerText = "invalid coupon"
+            }
+
+
+        }
+
+
+    }
+
+    function add(index) {
+        document.querySelector(".container").innerHTML = "";
+        cartarr[index].qty++;
+        localStorage.setItem("Cartlocal", JSON.stringify(cartarr))
+
+
+    }
+
+    function decrease(index) {
+        document.querySelector(".container").innerHTML = "";
+        if (cartarr[index].qty > 0) {
+            cartarr[index].qty--;
+            localStorage.setItem("Cartlocal", JSON.stringify(cartarr))
+        }
+    }
+    document.querySelector(".checkout").addEventListener("click", function() {
+        window.location.href = "success.html"
+    })
+
+
+
+
+
+    datashow()
+</script>
+
+
+
+</html>
